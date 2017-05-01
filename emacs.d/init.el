@@ -79,6 +79,9 @@
 ;; Prefer UTF-8
 (prefer-coding-system 'utf-8)
 
+;; Enable highlighting in grep results
+(setq grep-highlight-matches t)
+
 ;;;; Package configurations
 
 ;; Load our file that configures the package manager and
@@ -242,6 +245,24 @@
 	      (setq-local show-trailing-whitespace t)
 	      (setq-local indent-tabs-mode nil))))
 (use-package sbt-mode)
+
+(use-package magic-latex-buffer :ensure t)
+(use-package tex :ensure auctex
+  :init
+  (setq TeX-view-program-selection '((output-pdf "xdg-open")))
+	;; (((output-dvi has-no-display-manager) "dvi2tty")
+	;; 			    ((output-dvi style-pstricks)
+	;; 			     "dvips and gv")
+	;; 			    (output-dvi "xdvi")
+	;; 			    (output-pdf "xdg-open")
+	;; 			    (output-html "xdg-open")))
+  (setq TeX-PDF-mode t))
+
+;; Allow emacs to be a pdf reader
+(use-package pdf-tools
+  :ensure t
+  :init
+  (pdf-tools-install))
 
 ;; Tidy the up the mode line by diminishing the Abbrev minor mode
 ;; indicator in the mode line.
