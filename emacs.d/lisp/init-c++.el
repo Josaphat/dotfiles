@@ -34,6 +34,9 @@
 	    (setq-local show-trailing-whitespace t)
 	    (setq-local column-number-mode t)
 	    (setq-local indent-tabs-mode nil)))
+(add-hook 'c-mode-common-hook
+	  (lambda ()
+	    (flyspell-prog-mode)))
 
 (provide 'init-c++)
 
