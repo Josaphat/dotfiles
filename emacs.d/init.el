@@ -166,7 +166,8 @@
   (add-hook 'c++-mode-hook 'flycheck-mode)
   (add-hook 'c-mode-hook 'flycheck-mode)
   (add-hook 'objc-mode-hook 'flycheck-mode)
-  (add-hook 'rust-mode 'flycheck-mode))
+  (add-hook 'rust-mode 'flycheck-mode)
+  (add-hook 'go-mode-hook 'flycheck-mode))
 (use-package flycheck-irony
   :ensure t
   :after flycheck irony
@@ -213,7 +214,13 @@
 (use-package geiser :ensure t)
 
 ;; go-lang
-(use-package go-mode :ensure t)
+(use-package go-eldoc :ensure t)
+(use-package go-mode :ensure t
+  :init
+  (add-hook 'go-mode-hook 'go-eldoc-setup))
+(use-package company-go  :ensure t
+  :init
+  (add-to-list 'company-backends 'company-go))
 
 ;; To actually use rtags, make sure you have the daemon installed and
 ;; in your path, make sure you have a compile_comamnds.json file for
