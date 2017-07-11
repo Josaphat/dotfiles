@@ -276,6 +276,11 @@
   :init
   (pdf-tools-install))
 
+;; For emergency web-dev
+(use-package web-mode :ensure t)
+(use-package php-mode :ensure t)
+
+
 ;; Tidy the up the mode line by diminishing the Abbrev minor mode
 ;; indicator in the mode line.
 (use-package abbrev
