@@ -40,6 +40,9 @@ function cake() {
     fi
 }
 
-alias cppgrep='grep --include="*.h" --include="*.cpp" --include="*.c" '
+alias cppgrep='grep --include="*.h" --include="*.cpp" --include="*.c" --include="*.cc" --include="*.cxx" '
 alias edit=""$EDITOR""
 alias vimclient="gvim --remote "
+alias ec="emacsclient"
+
+export MAKEFLAGS=-j`nproc`

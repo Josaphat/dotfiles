@@ -82,6 +82,11 @@
 ;; Enable highlighting in grep results
 (setq grep-highlight-matches t)
 
+;; Make sure extra dired stuff is available (specifically for renaming
+;; the files of open buffers)
+(add-hook 'dired-load-hook
+	  (function (lambda () (load "dired-x"))))
+
 ;;;; Package configurations
 
 ;; Load our file that configures the package manager and
@@ -283,10 +288,25 @@
 
 
 ;; Appearance
-(use-package moe-theme
-  :ensure t
-  :config
-  (moe-dark))
+;; (use-package solarized-theme :ensure t :init
+;;   (setq solarized-distinct-fringe-background t)
+;;   (setq solarized-scale-org-headlines nil)
+;;   (load-theme 'solarized-light))
+;; (use-package zenburn-theme :ensure t)
+;; (use-package distinguished-theme :ensure t)
+;; (use-package cyberpunk-theme :ensure t)
+;; (use-package monokai-theme :ensure t)
+;; (use-package dracula-theme :ensure t)
+;; (use-package doom-themes :ensure t
+;;   :init
+;;   (doom-themes-visual-bell-config)
+;;   (doom-themes-neotree-config)
+;;   (load-theme 'doom-one t)
+;;   (set-face-background 'mode-line "#5b6268")
+;;   (set-face-foreground 'mode-line "#282c34")
+;;   (set-face-background 'mode-line-inactive "#22262c")
+;;   (set-face-foreground 'mode-line-inactive "#282c34"))
+(use-package atom-one-dark-theme :ensure t)
 
 (require 'init-c++)
 
