@@ -184,7 +184,7 @@
 (when (eq system-type 'windows-nt)
   (setq ispell-program-name "aspell"))
 
-;; RUST
+;; rust-lang
 (use-package flycheck-rust
   :ensure t
   :config
@@ -226,12 +226,12 @@
 ;; To actually use rtags, make sure you have the daemon installed and
 ;; in your path, make sure you have a compile_comamnds.json file for
 ;; your project, and run `rc -J /directory/with/compilecommands/'
-;; (use-package rtags
-;;   :ensure t
-;;   :init
-;;   (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
-;;   (add-hook 'c-mode-hook 'rtags-start-process-unless)
-;;   (rtags-enable-standard-keybindings))
+(use-package rtags
+  :ensure t
+  :init
+  (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
+  (add-hook 'c-mode-hook 'rtags-start-process-unless)
+  (rtags-enable-standard-keybindings))
 
 ;; magit is a great git porcelain
 (use-package magit :ensure t)
@@ -242,17 +242,11 @@
 ;; A lot of projects use CMake
 (use-package cmake-font-lock :ensure t)
 
-;; For writing beautiful documents
+;; LaTeX editing
 (use-package magic-latex-buffer :ensure t)
 (use-package tex :ensure auctex
   :init
   (setq TeX-view-program-selection '((output-pdf "xdg-open")))
-	;; (((output-dvi has-no-display-manager) "dvi2tty")
-	;; 			    ((output-dvi style-pstricks)
-	;; 			     "dvips and gv")
-	;; 			    (output-dvi "xdvi")
-	;; 			    (output-pdf "xdg-open")
-	;; 			    (output-html "xdg-open")))
   (setq TeX-PDF-mode t))
 
 ;; Allow emacs to be a pdf reader
@@ -268,7 +262,6 @@
   :config
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
-
 
 (use-package
   ansi-color :ensure t
