@@ -50,7 +50,7 @@
 ;; Put emacs customizations into their own file.  We don't need them
 ;; cluttering up our init.el, especially if we release it for use by
 ;; others.  If we change its location, we have to load it ourselves.
-;; Using the parameter 'noerror makes sure that we ignore the irror
+;; Using the parameter 'noerror makes sure that we ignore the error
 ;; for the case where the file doesn't yet exist.
 (setq custom-file (locate-user-emacs-file "emacs-custom.el"))
 (load custom-file 'noerror)
@@ -62,15 +62,18 @@
 (setq auto-save-file-name-transorms
       `((".*" ,temporary-file-directory t)))
 
-;; If you're keeping the splash screen, might as well spice it up :^)
-;; I couldn't find good documentation on requirements, but this didn't
-;; work for me until I tried an image that was 249px in height.
-(setq fancy-splash-image (expand-file-name "~/Pictures/hills_sing.png"))
+;; ;; If you're keeping the splash screen, might as well spice it up :^)
+;; ;; I couldn't find good documentation on requirements, but this didn't
+;; ;; work for me until I tried an image that was 249px in height.
+;; (setq fancy-splash-image (expand-file-name "~/Pictures/hills_sing.png"))
 (setq inhibit-startup-screen t)		; I'm not keeping it...
 
 ;; Add ~/.emacs.d/lisp to the load path. This makes it so that we can
 ;; (require) the things we put into that directory.
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
+;; Add the path to the latest byte-compiled cc-mode to the load path.
+(add-to-list 'load-path (expand-file-name "cc-mode-5.33" user-emacs-directory))
 
 ;; Don't commit any secrets like API tokens or secret keys.  Keep them
 ;; all in a separate file. If it doesn't exist that's fine.
@@ -103,7 +106,8 @@
   :ensure t
   :diminish projectile-mode
   :config
-  (projectile-global-mode)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (projectile-mode +1)
   ;; Projectile supports caching so that it doesn't have to re-index a
   ;; project all the time (which can be slow).  It is enabled by
   ;; default when the "native" Emacs Lisp indexing implementation is
@@ -118,45 +122,6 @@
   :init
   (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode))
 
-;; Irony is a great backbone for a better C/C++ editing experience.
-;; It can provide code completion as well as syntax checking (not
-;; entirely on its own).
-(use-package irony
-  :ensure t
-  :init
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
-  (defun jos/irony-mode-hook ()
-    ;; Replace the completion bindings in irony-mode buffer with the
-    ;; irony mode counterparts:
-    (define-key irony-mode-map [remap completion-at-point]
-      'irony-completion-at-point-async)
-    (define-key irony-mode-map [remap complete-symbol]
-      'irony-completion-at-point-async))
-  (add-hook 'irony-mode-hook 'jos/irony-mode-hook)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-
-;; COMPlete ANY (company) will serve as our completion system.  It's
-;; not that great on its own, though, so we combine it with irony
-;; using company-irony
-(use-package company
-  :ensure t
-  :diminish "cmp"
-  :init
-  (global-company-mode))
-(use-package company-irony
-  :ensure t
-  :after company
-  :init
-  (add-to-list 'company-backends 'company-irony))
-(use-package company-irony-c-headers
-  :ensure t
-  :after irony company
-  :init
-  (add-to-list 'company-backends 'company-irony-c-headers))
-
-
 ;; Flycheck gives us quick diagnostics for our C/C++ programs.  If we
 ;; hook it up to the irony backend it's a breeze to set up.  This will
 ;; verify the file we're editing compiles and highlights any errors.
@@ -168,26 +133,43 @@
   (add-hook 'objc-mode-hook 'flycheck-mode)
   (add-hook 'rust-mode 'flycheck-mode)
   (add-hook 'go-mode-hook 'flycheck-mode))
-(use-package flycheck-irony
-  :ensure t
-  :after flycheck irony
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+
+;; If we're on debian, put the clang-format subdirectory into the load
+;; path
+(when (file-exists-p "/usr/share/emacs/site-lisp/clang-format-6.0/clang-format.el")
+  (add-to-list 'load-path "/usr/share/emacs/site-lisp/clang-format-6.0"))
 
 ;; Integrate clang-format, but not if we're on windows.
 (unless (eq system-type 'windows-nt)
-  (load-library "clang-format.el")
-  (global-set-key [C-M-tab] 'clang-format-region))
+   (load-library "clang-format.el")
+   (global-set-key [C-M-tab] 'clang-format-region))
 
 ;; Spell checking on windows
 (when (eq system-type 'windows-nt)
   (setq ispell-program-name "aspell"))
 
-;; RUST
-(use-package flycheck-rust
+(use-package eglot :ensure t)
+(defun projectile-project-find-function (dir)
+  (let* ((root (projectile-project-root dir)))
+    (and root (cons 'transient root))))
+(with-eval-after-load 'project
+  (add-to-list 'project-find-functions 'projectile-project-find-function))
+(use-package ccls :ensure t)
+;; (use-package ccls
+;;   :hook ((c-mode c++-mode objc-mode c-mode) . (lambda () (require 'ccls) (lsp))))
+
+
+(use-package company
   :ensure t
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  :diminish "cmp"
+  :init (global-company-mode))
+
+
+;; RUST
+;; (use-package flycheck-rust
+;;   :ensure t
+;;   :config
+;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 (use-package cargo :ensure t)
 (use-package rust-mode
   :ensure t
@@ -208,7 +190,6 @@
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook #'eldoc-mode)
   (add-hook 'racer-mode-hook #'company-mode))
-(use-package cargo :ensure t)
 
 ;; scheme/guile
 (use-package geiser :ensure t)
@@ -222,22 +203,6 @@
   :init
   (add-to-list 'company-backends 'company-go))
 
-;; To actually use rtags, make sure you have the daemon installed and
-;; in your path, make sure you have a compile_comamnds.json file for
-;; your project, and run `rc -J /directory/with/compilecommands/'
-(use-package rtags
-  :ensure t
-  :init
-  (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
-  (add-hook 'c-mode-hook 'rtags-start-process-unless)
-  (rtags-enable-standard-keybindings))
-
-;; Set up yasnippet
-(use-package yasnippet
-  :ensure t
-  :init
-  (yas-global-mode 1))
-
 ;; magit is a great git porcelain
 (use-package magit :ensure t)
 
@@ -246,17 +211,6 @@
 
 ;; A lot of projects use CMake
 (use-package cmake-font-lock :ensure t)
-
-;; scala - Leaving out `:ensure t' because I'm only using it at home for
-;; a functional programming course on coursera
-(use-package ensime :pin melpa-stable)
-(use-package scala-mode
-  :init
-  (add-hook 'scala-mode-hook
-	    (lambda ()
-	      (setq-local show-trailing-whitespace t)
-	      (setq-local indent-tabs-mode nil))))
-(use-package sbt-mode)
 
 (use-package magic-latex-buffer :ensure t)
 (use-package tex :ensure auctex
@@ -276,10 +230,9 @@
   :init
   (pdf-tools-install))
 
-;; For emergency web-dev
-(use-package web-mode :ensure t)
-(use-package php-mode :ensure t)
-
+;; In case of emergency web-dev
+;; (use-package web-mode :ensure t)
+;; (use-package php-mode :ensure t)
 
 ;; Tidy the up the mode line by diminishing the Abbrev minor mode
 ;; indicator in the mode line.
@@ -289,7 +242,6 @@
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
 
-
 (use-package
   ansi-color :ensure t
   :config
@@ -298,32 +250,16 @@
       (ansi-color-apply-on-region (point-min) (point-max))))
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
-
 ;; Appearance
-;; (use-package solarized-theme :ensure t :init
-;;   (setq solarized-distinct-fringe-background t)
-;;   (setq solarized-scale-org-headlines nil)
-;;   (load-theme 'solarized-light))
-;; (use-package zenburn-theme :ensure t)
-;; (use-package distinguished-theme :ensure t)
-;; (use-package cyberpunk-theme :ensure t)
-;; (use-package monokai-theme :ensure t)
-;; (use-package dracula-theme :ensure t)
-;; (use-package doom-themes :ensure t
-;;   :init
-;;   (doom-themes-visual-bell-config)
-;;   (doom-themes-neotree-config)
-;;   (load-theme 'doom-one t)
-;;   (set-face-background 'mode-line "#5b6268")
-;;   (set-face-foreground 'mode-line "#282c34")
-;;   (set-face-background 'mode-line-inactive "#22262c")
-;;   (set-face-foreground 'mode-line-inactive "#282c34"))
-(use-package atom-one-dark-theme :ensure t)
+(use-package doom-themes :ensure t
+  :init
+  (load-theme 'doom-one-light t)
+  (doom-themes-visual-bell-config)
+  ;; (doom-themes-neotree-config)
+  (doom-themes-org-config))
 
 (require 'init-c++)
-
-(require 'init-org)
-
+;; (require 'init-org)
 (require 'jos-utils)
 
 (message "init.el complete")
