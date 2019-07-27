@@ -22,6 +22,7 @@
 ;;; Code:
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.m\\'" . objc-mode))
 (setq c-default-style '((java-mode . "java")
 			("awk-mode" . "awk")
 			(other . "stroustrup")))
@@ -36,6 +37,7 @@
 	    (setq-local indent-tabs-mode nil)))
 (add-hook 'c-mode-common-hook
 	  (lambda ()
+	    (electric-pair-local-mode)
 	    (flyspell-prog-mode)))
 
 (provide 'init-c++)
