@@ -232,12 +232,6 @@
   (add-hook 'c-mode-hook 'rtags-start-process-unless)
   (rtags-enable-standard-keybindings))
 
-;; Set up yasnippet
-(use-package yasnippet
-  :ensure t
-  :init
-  (yas-global-mode 1))
-
 ;; magit is a great git porcelain
 (use-package magit :ensure t)
 
@@ -247,17 +241,7 @@
 ;; A lot of projects use CMake
 (use-package cmake-font-lock :ensure t)
 
-;; scala - Leaving out `:ensure t' because I'm only using it at home for
-;; a functional programming course on coursera
-(use-package ensime :pin melpa-stable)
-(use-package scala-mode
-  :init
-  (add-hook 'scala-mode-hook
-	    (lambda ()
-	      (setq-local show-trailing-whitespace t)
-	      (setq-local indent-tabs-mode nil))))
-(use-package sbt-mode)
-
+;; For writing beautiful documents
 (use-package magic-latex-buffer :ensure t)
 (use-package tex :ensure auctex
   :init
@@ -275,11 +259,6 @@
   :ensure t
   :init
   (pdf-tools-install))
-
-;; For emergency web-dev
-(use-package web-mode :ensure t)
-(use-package php-mode :ensure t)
-
 
 ;; Tidy the up the mode line by diminishing the Abbrev minor mode
 ;; indicator in the mode line.
@@ -299,32 +278,17 @@
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
 
-;; Appearance
-;; (use-package solarized-theme :ensure t :init
-;;   (setq solarized-distinct-fringe-background t)
-;;   (setq solarized-scale-org-headlines nil)
-;;   (load-theme 'solarized-light))
-;; (use-package zenburn-theme :ensure t)
-;; (use-package distinguished-theme :ensure t)
-;; (use-package cyberpunk-theme :ensure t)
-;; (use-package monokai-theme :ensure t)
-;; (use-package dracula-theme :ensure t)
-;; (use-package doom-themes :ensure t
-;;   :init
-;;   (doom-themes-visual-bell-config)
-;;   (doom-themes-neotree-config)
-;;   (load-theme 'doom-one t)
-;;   (set-face-background 'mode-line "#5b6268")
-;;   (set-face-foreground 'mode-line "#282c34")
-;;   (set-face-background 'mode-line-inactive "#22262c")
-;;   (set-face-foreground 'mode-line-inactive "#282c34"))
-(use-package atom-one-dark-theme :ensure t)
-
 (require 'init-c++)
-
 (require 'init-org)
-
 (require 'jos-utils)
+
+;; Appearance
+(use-package doom-themes
+  :ensure t
+  :init
+  (load-theme 'doom-one-light t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
 
 (message "init.el complete")
 
