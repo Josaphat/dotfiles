@@ -50,7 +50,7 @@
 ;; Put emacs customizations into their own file.  We don't need them
 ;; cluttering up our init.el, especially if we release it for use by
 ;; others.  If we change its location, we have to load it ourselves.
-;; Using the parameter 'noerror makes sure that we ignore the irror
+;; Using the parameter 'noerror makes sure that we ignore the error
 ;; for the case where the file doesn't yet exist.
 (setq custom-file (locate-user-emacs-file "emacs-custom.el"))
 (load custom-file 'noerror)
@@ -65,7 +65,7 @@
 ;; If you're keeping the splash screen, might as well spice it up :^)
 ;; I couldn't find good documentation on requirements, but this didn't
 ;; work for me until I tried an image that was 249px in height.
-(setq fancy-splash-image (expand-file-name "~/Pictures/hills_sing.png"))
+;; (setq fancy-splash-image (expand-file-name "~/Pictures/hills_sing.png"))
 (setq inhibit-startup-screen t)		; I'm not keeping it...
 
 ;; Add ~/.emacs.d/lisp to the load path. This makes it so that we can
@@ -103,7 +103,8 @@
   :ensure t
   :diminish projectile-mode
   :config
-  (projectile-global-mode)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1)
   ;; Projectile supports caching so that it doesn't have to re-index a
   ;; project all the time (which can be slow).  It is enabled by
   ;; default when the "native" Emacs Lisp indexing implementation is
@@ -208,7 +209,11 @@
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook #'eldoc-mode)
   (add-hook 'racer-mode-hook #'company-mode))
-(use-package cargo :ensure t)
+
+;; python
+(use-package py-yapf :ensure t
+  :init
+  (add-hook 'python-mode-hook 'py-yapf-enable-on-save))
 
 ;; scheme/guile
 (use-package geiser :ensure t)
@@ -221,16 +226,6 @@
 (use-package company-go  :ensure t
   :init
   (add-to-list 'company-backends 'company-go))
-
-;; To actually use rtags, make sure you have the daemon installed and
-;; in your path, make sure you have a compile_comamnds.json file for
-;; your project, and run `rc -J /directory/with/compilecommands/'
-(use-package rtags
-  :ensure t
-  :init
-  (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
-  (add-hook 'c-mode-hook 'rtags-start-process-unless)
-  (rtags-enable-standard-keybindings))
 
 ;; magit is a great git porcelain
 (use-package magit :ensure t)
@@ -277,11 +272,6 @@
       (ansi-color-apply-on-region (point-min) (point-max))))
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 
-
-(require 'init-c++)
-(require 'init-org)
-(require 'jos-utils)
-
 ;; Appearance
 (use-package doom-themes
   :ensure t
@@ -289,6 +279,10 @@
   (load-theme 'doom-one-light t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
+
+(require 'init-c++)
+(require 'init-org)
+(require 'jos-utils)
 
 (message "init.el complete")
 

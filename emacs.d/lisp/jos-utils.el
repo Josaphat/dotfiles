@@ -63,6 +63,26 @@ defaulted."
   (insert classname "& operator=(" classname " &&) = default;")
   (newline-and-indent))
 
+(defun jos/strip-sysroot-from-file (filename)
+  "Remove all occurrences of the sysroot compiler parameter from
+FILE."
+  (message "Working on `%s' ... " filename)
+  (save-excursion
+    (let ((buffer (find-file-noselect filename)))
+      (set-buffer buffer)
+      (widen)
+      (goto-char (point-min))
+      (replace-string "--sysroot=/usr/local/gcc-arm-none-eabi-7-2018-q2-update/arm-none-eabi " "")
+      (goto-char (point-min))
+      (replace-string "-pedantic" "-pedantic -Wno-gnu-zero-variadic-macro-arguments")
+      (save-buffer)
+      (kill-buffer buffer))))
+(defun jos/remove-sysroot-compile-commands ()
+  "Removes the sysroot parameters from the compile_commands.json
+file."
+  (interactive)
+  (jos/strip-sysroot-from-file "/home/jos/Code/signet/firmware/build/Token1Rev2Dev/Debug/compile_commands.json"))
+
 (provide 'jos-utils)
 
 ;;; jos-utils.el ends here
