@@ -103,7 +103,8 @@
   :ensure t
   :diminish projectile-mode
   :config
-  (projectile-global-mode)
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   ;; Projectile supports caching so that it doesn't have to re-index a
   ;; project all the time (which can be slow).  It is enabled by
   ;; default when the "native" Emacs Lisp indexing implementation is
@@ -286,7 +287,7 @@
 (use-package doom-themes
   :ensure t
   :init
-  (load-theme 'doom-tomorrow-night t)
+  (load-theme 'doom-opera t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 

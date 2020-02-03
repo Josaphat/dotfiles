@@ -21,11 +21,11 @@
 
 ;;; Code:
 
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cc" 'org-capture)
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-directory "~/Dropbox/org")
+(setq org-directory "/home/jvaldivi/Documents/org/")
 
 (setq org-log-done t)
 
@@ -34,6 +34,7 @@
 				 ("calendar.org" :maxlevel . 1))))
 
 (setq org-default-notes-file (concat org-directory "/inbox.org"))
+(setq org-agenda-files (list org-directory))
 
 (add-hook 'org-mode-hook 'flyspell-mode)
 
