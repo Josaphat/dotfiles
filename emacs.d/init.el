@@ -223,16 +223,6 @@
   :init
   (add-to-list 'company-backends 'company-go))
 
-;; To actually use rtags, make sure you have the daemon installed and
-;; in your path, make sure you have a compile_comamnds.json file for
-;; your project, and run `rc -J /directory/with/compilecommands/'
-(use-package rtags
-  :ensure t
-  :init
-  (add-hook 'c++-mode-hook 'rtags-start-process-unless-running)
-  (add-hook 'c-mode-hook 'rtags-start-process-unless)
-  (rtags-enable-standard-keybindings))
-
 ;; magit is a great git porcelain
 (use-package magit :ensure t)
 
