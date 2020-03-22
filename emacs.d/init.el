@@ -119,61 +119,40 @@
   :init
   (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode))
 
-;; Irony is a great backbone for a better C/C++ editing experience.
-;; It can provide code completion as well as syntax checking (not
-;; entirely on its own).
-(use-package irony
+(use-package lsp-mode
   :ensure t
-  :init
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
-  (defun jos/irony-mode-hook ()
-    ;; Replace the completion bindings in irony-mode buffer with the
-    ;; irony mode counterparts:
-    (define-key irony-mode-map [remap completion-at-point]
-      'irony-completion-at-point-async)
-    (define-key irony-mode-map [remap complete-symbol]
-      'irony-completion-at-point-async))
-  (add-hook 'irony-mode-hook 'jos/irony-mode-hook)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+  :commands (lsp lsp-deferred)
+  :hook (go-mode . lsp-deferred))
 
-;; COMPlete ANY (company) will serve as our completion system.  It's
-;; not that great on its own, though, so we combine it with irony
-;; using company-irony
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+;; golang
+(use-package go-mode
+  :ensure t)
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;; COMPlete ANY (company) will serve as our completion system.
 (use-package company
   :ensure t
   :diminish "cmp"
   :init
   (global-company-mode))
-(use-package company-irony
+(use-package company-lsp
   :ensure t
-  :after company
-  :init
-  (add-to-list 'company-backends 'company-irony))
-(use-package company-irony-c-headers
-  :ensure t
-  :after irony company
-  :init
-  (add-to-list 'company-backends 'company-irony-c-headers))
+  :commands company-lsp)
 
-
-;; Flycheck gives us quick diagnostics for our C/C++ programs.  If we
-;; hook it up to the irony backend it's a breeze to set up.  This will
-;; verify the file we're editing compiles and highlights any errors.
 (use-package flycheck
   :ensure t
   :init
-  (add-hook 'c++-mode-hook 'flycheck-mode)
-  (add-hook 'c-mode-hook 'flycheck-mode)
+  ;; (add-hook 'c++-mode-hook 'flycheck-mode)
+  ;; (add-hook 'c-mode-hook 'flycheck-mode)
   (add-hook 'objc-mode-hook 'flycheck-mode)
-  (add-hook 'rust-mode 'flycheck-mode)
-  (add-hook 'go-mode-hook 'flycheck-mode))
-(use-package flycheck-irony
-  :ensure t
-  :after flycheck irony
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+  (add-hook 'rust-mode 'flycheck-mode))
 
 ;; Integrate clang-format, but not if we're on windows.
 (unless (eq system-type 'windows-nt)
@@ -209,19 +188,9 @@
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook #'eldoc-mode)
   (add-hook 'racer-mode-hook #'company-mode))
-(use-package cargo :ensure t)
 
 ;; scheme/guile
 (use-package geiser :ensure t)
-
-;; go-lang
-(use-package go-eldoc :ensure t)
-(use-package go-mode :ensure t
-  :init
-  (add-hook 'go-mode-hook 'go-eldoc-setup))
-(use-package company-go  :ensure t
-  :init
-  (add-to-list 'company-backends 'company-go))
 
 ;; magit is a great git porcelain
 (use-package magit :ensure t)
@@ -270,7 +239,7 @@
 (use-package doom-themes
   :ensure t
   :init
-  (load-theme 'doom-opera t)
+  (load-theme 'doom-Iosvkem t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
