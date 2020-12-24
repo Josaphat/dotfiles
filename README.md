@@ -1,10 +1,10 @@
 What you're getting
 ------------------------------
-This is my configuration for vim and zsh.  It uses antigen for
-managing zsh extensions and pathogen for managing vim plugins.
+
+This is my configuration for emacs, zsh, and vim. For zsh it uses the grml
+configuration, and it uses vim-pathogen for managing vim plugins.
 
 Learn more about pathogen at https://github.com/tpope/vim-pathogen
-Learn more about antigen at https://github.com/zsh-users/antigen
 
 Installation
 ------------------------------
@@ -16,60 +16,25 @@ Then make ~/.vimrc ~/.vim and ~/.zshrc into symbolic links to the
 versions in the repository:
 
     ln -s ~/.dotfiles/zshrc ~/.zshrc
+    ln -s ~/.dotfiles/zshrc.local ~/.zshrc.local
     ln -s ~/.dotfiles/vimrc ~/.vimrc
     ln -s ~/.dotfiles/vim/ ~/.vim
 
 If you have an older git version or you forgot to use `--recursive` in
-the clone step:
+the clone step, you can run this after the fact:
 
     git submodule update --init --recursive
 
 Customization
 ------------------------------
-I won't stop you, but you aren't meant to be modifying the zsh config
-files directly.  Instead, you customize by modifying a few files in
-the `custom/` subdirectory.
+Generally you won't want to change the grml-provided `zshrc` file, and instead
+you'll want to make changes to `zshrc.local`.
 
-### Antigen Setup `custom/antigen_setup.zsh`
-If this file exists, it is loaded instead of the default setup:
-
-    antigen use oh-my-zsh
-	antigen bundle git
-	antigen bundle git-flow
-
-Create the file to customize what happens immediately after antigen is
-sourced and before `antigen apply` is invoked. **NOTE** Customizing
-the theme is a separate file.
-
-### Antigen Theme `custom/theme.zsh`
-If this file exists, it is loaded insetad of the default setup:
-
-    antigen theme af-magic
-
-### Setting $PATH `custom/path.zsh`
-Set path by editing `custom/path.zsh`.
-
-### Setting Environment Variables (that aren't path) `custom/environment.zsh`
-This file, if it exists is loaded in zshenv.  Export any environment
-variables here (other than PATH).
-
-### Aliases `custom/aliases.zsh`
-This file, if it exists, is loaded in zshenv after
-`custom/environment.zsh`.  It is loaded in zshenv in order for aliases
-to be available in shells as you'd normally expect, but also when you
-try to execute shell commands in vim using `:!`.
-
-### Super-customization of zprofile `custom/zprofilecustom.zsh`
-This file, if it exists, is loaded at the end of zprofile.  You do
-whatever you want here, usually if it doesn't have a designated
-customization file.  Note that this is meant to customize login
-shells.
-
-### Super-customization of zshrc `custom/zshrcustom.zsh`
-This file, if it exists, is loaded at the end of zshrc.  You do
-whatever you want here, usually if it doesn't have a designated
-customization file.  Note that this is meant to customize interactive
-shells.
+It used to be that I had a whole system for maintaining customizations separate
+from "core" files, but meh. I found it was more effort than it's really worth
+when you're running the same config on diverse systems (Fedora, FreeBSD, cygwin,
+Arch, Ubuntu...), all subtly different.  Plus, it's updated so rarely I can't be
+bothered.
 
 Problems
 ------------------------------

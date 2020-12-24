@@ -87,6 +87,9 @@
 (add-hook 'dired-load-hook
 	  (function (lambda () (load "dired-x"))))
 
+;; Make sure we're including a newline at the end of our files
+(setq-default require-final-newline t)
+
 ;;;; Package configurations
 
 ;; Load our file that configures the package manager and
@@ -122,7 +125,10 @@
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
-  :hook (go-mode . lsp-deferred))
+  :hook
+  (go-mode . lsp-deferred)
+  (c++-mode . lsp-deferred)
+  (c-mode . lsp-deferred))
 
 (use-package lsp-ui
   :ensure t
@@ -239,7 +245,8 @@
 (use-package doom-themes
   :ensure t
   :init
-  (load-theme 'doom-Iosvkem t)
+  (load-theme 'doom-one t)
+  ;; (load-theme 'doom-solarized-dark t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 

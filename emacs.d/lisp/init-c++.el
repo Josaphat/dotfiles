@@ -26,7 +26,7 @@
 (setq c-default-style '((java-mode . "java")
 			("awk-mode" . "awk")
 			(other . "stroustrup")))
-(setq c-basic-offset 4)
+(setq c-basic-offset 2)
 (c-set-offset 'innamespace 0)
 (c-set-offset 'inline-open 0)
 (add-hook 'c-mode-common-hook
@@ -37,7 +37,7 @@
 	    (setq-local indent-tabs-mode nil)))
 (add-hook 'c-mode-common-hook
 	  (lambda ()
-	    (electric-pair-local-mode)
+	    ;; (electric-pair-local-mode)
 	    (flyspell-prog-mode)))
 
 (provide 'init-c++)
