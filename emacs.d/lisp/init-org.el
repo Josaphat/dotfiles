@@ -28,13 +28,10 @@
 (setq org-directory "/home/jvaldivi/Documents/org/")
 
 (setq org-log-done t)
-
-(setq org-refile-targets (quote (("NextActions.org" :maxlevel . 1)
-				 ("someday.org" :maxlevel . 1)
-				 ("calendar.org" :maxlevel . 1))))
-
 (setq org-default-notes-file (concat org-directory "/inbox.org"))
 (setq org-agenda-files (list org-directory))
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
 
 (add-hook 'org-mode-hook 'flyspell-mode)
 

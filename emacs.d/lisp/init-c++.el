@@ -23,6 +23,8 @@
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.m\\'" . objc-mode))
+;; Open doxygen-only files as C++
+(add-to-list 'auto-mode-alist '("\\.dox\\'" . c++-mode))
 (setq c-default-style '((java-mode . "java")
 			("awk-mode" . "awk")
 			(other . "stroustrup")))

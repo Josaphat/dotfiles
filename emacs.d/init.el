@@ -50,7 +50,7 @@
 ;; Put emacs customizations into their own file.  We don't need them
 ;; cluttering up our init.el, especially if we release it for use by
 ;; others.  If we change its location, we have to load it ourselves.
-;; Using the parameter 'noerror makes sure that we ignore the irror
+;; Using the parameter 'noerror makes sure that we ignore the error
 ;; for the case where the file doesn't yet exist.
 (setq custom-file (locate-user-emacs-file "emacs-custom.el"))
 (load custom-file 'noerror)
@@ -99,6 +99,8 @@
 ;; Auto-fill mode
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
+(use-package ivy :ensure t)
+
 ;; Use the projectile package which helps us get around in our
 ;; project.
 ;; Find the documentation at http://batsov.com/projectile/
@@ -112,9 +114,8 @@
   ;; project all the time (which can be slow).  It is enabled by
   ;; default when the "native" Emacs Lisp indexing implementation is
   ;; used but we'll enable it everywhere because why not?
-  (setq projectile-enable-caching t))
-
-;; TODO: Add helm-projectile?
+  (setq projectile-enable-caching t)
+  (setq projectile-completion-system 'ivy))
 
 ;; Modern C++ highlighting
 (use-package modern-cpp-font-lock
@@ -207,6 +208,10 @@
 ;; A lot of projects use CMake
 (use-package cmake-font-lock :ensure t)
 
+;; A lot of protobuf
+(use-package protobuf-mode
+  :ensure t)
+
 ;; LaTeX editing
 (use-package magic-latex-buffer :ensure t)
 (use-package tex :ensure auctex
@@ -245,10 +250,9 @@
 (use-package doom-themes
   :ensure t
   :init
-  (load-theme 'doom-one t)
-  ;; (load-theme 'doom-solarized-dark t)
   (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
+  (doom-themes-org-config)
+  (load-theme doom-one t))
 
 (message "init.el complete")
 

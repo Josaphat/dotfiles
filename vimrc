@@ -85,7 +85,8 @@ set tm=500
 syntax enable
 
 " Colorscheme
-colorscheme badwolf
+set background=dark
+colorscheme solarized
 
 " Set extra options when running in GUI mode
 if has("gui_running")
@@ -93,7 +94,7 @@ if has("gui_running")
     set guioptions-=e
     set t_Co=256
     set guitablabel=%M\ %t
-    set guifont="Inconsolata-g_Medium_10"
+    set guifont="DejaVu Sans Mono-g_Book_10"
 endif
 
 " Set utf8 as standard encoding and en_US as the standard language
@@ -281,7 +282,7 @@ elseif has("win16") || has("win32")
 elseif has("linux")
     set gfn=Source\ Code\ Pro:h12,Bitstream\ Vera\ Sans\ Mono:h11
 elseif has("unix")
-    set gfn=Monospace\ 11
+    set gfn=DejaVu\ Sans\ Mono\ 10
 endif
 
 " Disable scrollbars
@@ -312,13 +313,13 @@ vnoremap $q <esc>`>a'<esc>`<i'<esc>
 vnoremap $e <esc>`>a"<esc>`<i"<esc>
 
 " Map auto complete of (, ", ', [
-inoremap $1 ()<esc>i
-inoremap $2 []<esc>i
-inoremap $3 {}<esc>i
-inoremap $4 {<esc>o}<esc>O
-inoremap $q ''<esc>i
-inoremap $e ""<esc>i
-inoremap $t <><esc>i
+"inoremap $1 ()<esc>i
+"inoremap $2 []<esc>i
+"inoremap $3 {}<esc>i
+"inoremap $4 {<esc>o}<esc>O
+"inoremap $q ''<esc>i
+"inoremap $e ""<esc>i
+"inoremap $t <><esc>i
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGINS CONFIGURATION
@@ -350,7 +351,7 @@ map <leader>nf :NERDTreeFind<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-airline config
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline_theme="badwolf"
+let g:airline_theme="solarized"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Syntastic
