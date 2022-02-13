@@ -65,7 +65,7 @@
 ;; If you're keeping the splash screen, might as well spice it up :^)
 ;; I couldn't find good documentation on requirements, but this didn't
 ;; work for me until I tried an image that was 249px in height.
-(setq fancy-splash-image (expand-file-name "~/Pictures/hills_sing.png"))
+;(setq fancy-splash-image (expand-file-name "~/Pictures/hills_sing.png"))
 (setq inhibit-startup-screen t)		; I'm not keeping it...
 
 ;; Add ~/.emacs.d/lisp to the load path. This makes it so that we can
@@ -96,7 +96,7 @@
 ;; use-package.el
 (require 'init-elpa)
 
-;; Auto-fill mode
+;; Auto-fill mode - wraps lines for us.
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (use-package ivy :ensure t)
@@ -129,11 +129,17 @@
   :hook
   (go-mode . lsp-deferred)
   (c++-mode . lsp-deferred)
-  (c-mode . lsp-deferred))
+  (c-mode . lsp-deferred)
+  (csharp-mode . lsp-deferred)
+  (python-mode . lsp-deferred))
 
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode)
+
+(use-package python-mode
+  :ensure t
+  :custom (show-trailing-whitespace t))
 
 ;; golang
 (use-package go-mode
@@ -252,7 +258,7 @@
   :init
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
-  (load-theme doom-one t))
+  (load-theme 'doom-one t))
 
 (message "init.el complete")
 
