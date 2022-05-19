@@ -107,9 +107,10 @@
 (use-package projectile
   :ensure t
   :diminish projectile-mode
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
   :config
   (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   ;; Projectile supports caching so that it doesn't have to re-index a
   ;; project all the time (which can be slow).  It is enabled by
   ;; default when the "native" Emacs Lisp indexing implementation is
@@ -218,6 +219,24 @@
 (use-package protobuf-mode
   :ensure t)
 
+;; web editing
+(use-package web-mode
+  :ensure t
+  :diminish web-mode
+  :mode
+  (("\\.phtml\\'" . web-mode)
+   ("\\.tpl\\.php\\'" . web-mode)
+   ("\\.php\\'" . web-mode)
+   ("\\.jsp\\'" . web-mode)
+   ("\\.as[cp]x\\'" . web-mode)
+   ("\\.erb\\'" . web-mode)
+   ("\\.mustache\\'" . web-mode)
+   ("\\.djhtml\\'" . web-mode)
+   ("\\.jst.ejs\\'" . web-mode)
+   ("\\.html?\\'" . web-mode))
+  :init
+  (setq indent-tabs-mode nil))
+
 ;; LaTeX editing
 (use-package magic-latex-buffer :ensure t)
 (use-package tex :ensure auctex
@@ -246,7 +265,6 @@
     (let ((inhibit-read-only t))
       (ansi-color-apply-on-region (point-min) (point-max))))
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
-
 
 (require 'init-c++)
 (require 'init-org)

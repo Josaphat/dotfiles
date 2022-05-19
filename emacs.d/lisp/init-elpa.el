@@ -28,9 +28,20 @@
 (setq package-enable-at-startup nil)
 
 ;; Add additional repositories
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+(setq package-archives
+      '(("GNU elpa" . "https://elpa.gnu.org/packages/")
+	("org elpa" . "https://orgmode.org/elpa/")
+	("melpa" . "https://melpa.org/packages/")
+	("melpa-stable" . "https://stable.melpa.org/packages/"))
+      package-archive-priorities
+      '(("melpa" . 10)
+	("melpa-stable" . 9)
+	("GNU ELPA" . 8)
+	("org" . 10)))
+;; (add-to-list 'package-archives '("GNU ELPA" . "http://elpa.gnu.org/packages/"))
+;; (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
 
 (package-initialize)
 

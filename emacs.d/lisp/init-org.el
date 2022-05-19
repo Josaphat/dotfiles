@@ -25,7 +25,7 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-directory "/home/jvaldivi/Documents/org/")
+(setq org-directory "~/org/")
 
 (setq org-log-done t)
 (setq org-default-notes-file (concat org-directory "/inbox.org"))

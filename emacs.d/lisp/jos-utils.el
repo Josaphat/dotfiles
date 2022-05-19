@@ -29,7 +29,7 @@ This currently doesn't try to generate the macro name for you."
   (beginning-of-buffer)
   (insert "#ifndef " (upcase macroname) "\n#define " (upcase macroname) "\n")
   (end-of-buffer)
-  (insert "\n#endif\n")
+  (insert "\n#endif  // " (upcase macroname) "\n")
   (previous-line)
   (previous-line))
 
@@ -54,13 +54,13 @@ defaulted."
   (insert classname "(const " classname "&) = default;")
   (newline-and-indent)
   ;; 3. Move constructor
-  (insert classname "(" classname "&&) = default;")
+  (insert classname "(" classname "&&) noexcept = default;")
   (newline-and-indent)
   ;; 4. Copy-assignment operator
-  (insert classname "& operator=(const " classname " &) = default;")
+  (insert classname "& operator=(const " classname "&) = default;")
   (newline-and-indent)
   ;; 5. Move-assignment operator
-  (insert classname "& operator=(" classname " &&) = default;")
+  (insert classname "& operator=(" classname "&&) noexcept = default;")
   (newline-and-indent))
 
 (defun increment-number-at-point ()
