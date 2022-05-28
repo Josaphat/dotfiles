@@ -26,6 +26,7 @@
 ;; Open doxygen-only files as C++
 (add-to-list 'auto-mode-alist '("\\.dox\\'" . c++-mode))
 (setq c-default-style '((java-mode . "java")
+			(csharp-mode . "csharp")
 			("awk-mode" . "awk")
 			(other . "stroustrup")))
 (setq c-basic-offset 2)
@@ -34,6 +35,7 @@
 (add-hook 'c-mode-common-hook
 	  (lambda ()
 	    (setq fill-column 80)
+	    (setq tab-width 4)
 	    (setq-local show-trailing-whitespace t)
 	    (setq-local column-number-mode t)
 	    (setq-local indent-tabs-mode nil)))
@@ -41,6 +43,9 @@
 	  (lambda ()
 	    ;; (electric-pair-local-mode)
 	    (flyspell-prog-mode)))
+(add-hook 'csharp-mode-hook
+	  (lambda ()
+	    (c-set-style "csharp")))
 
 (provide 'init-c++)
 

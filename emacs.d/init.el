@@ -86,6 +86,7 @@
 ;; the files of open buffers)
 (add-hook 'dired-load-hook
 	  (function (lambda () (load "dired-x"))))
+(setq wdired-allow-to-change-permissions t)
 
 ;; Make sure we're including a newline at the end of our files
 (setq-default require-final-newline t)
@@ -126,17 +127,24 @@
 
 (use-package lsp-mode
   :ensure t
-  :commands (lsp lsp-deferred)
-  :hook
-  (go-mode . lsp-deferred)
-  (c++-mode . lsp-deferred)
-  (c-mode . lsp-deferred)
-  (csharp-mode . lsp-deferred)
-  (python-mode . lsp-deferred))
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (
+	 (elixir-mode . lsp-deferred)
+	 (c++-mode . lsp-deferred)
+	 (c-mode . lsp-deferred)
+	 (csharp-mode . lsp-deferred)
+	 (go-mode . lsp-deferred)
+	 (python-mode . lsp-deferred)
+	 (rust-mode . lsp-deferred))
+  :commands (lsp lsp-deferred))
 
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode)
+
+(use-package lsp-ivy
+  :commands lsp-ivy-workspace-symbol)
 
 (use-package python-mode
   :ensure t
@@ -149,6 +157,13 @@
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+(use-package tree-sitter :ensure t)
+(use-package tree-sitter-langs :ensure t)
+(use-package tree-sitter-indent :ensure t)
+
+(use-package csharp-mode
+  :ensure t)
 
 ;; COMPlete ANY (company) will serve as our completion system.
 (use-package company
@@ -163,10 +178,10 @@
 (use-package flycheck
   :ensure t
   :init
+  ;; lsp-ui already does this for us.
   ;; (add-hook 'c++-mode-hook 'flycheck-mode)
   ;; (add-hook 'c-mode-hook 'flycheck-mode)
-  (add-hook 'objc-mode-hook 'flycheck-mode)
-  (add-hook 'rust-mode 'flycheck-mode))
+  (add-hook 'objc-mode-hook 'flycheck-mode))
 
 ;; Integrate clang-format, but not if we're on windows.
 (unless (eq system-type 'windows-nt)
@@ -178,30 +193,13 @@
   (setq ispell-program-name "aspell"))
 
 ;; rust-lang
-(use-package flycheck-rust
-  :ensure t
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
-(use-package cargo :ensure t)
 (use-package rust-mode
   :ensure t
-  :after cargo
   :init
   (add-hook 'rust-mode-hook
 	    (lambda ()
 	      (setq-local show-trailing-whitespace t)
-	      (setq-local indent-tabs-mode nil)))
-  (add-hook 'rust-mode-hook
-	    (lambda ()
-	      (local-set-key [C-M-tab] 'rust-format-buffer)))
-  (add-hook 'rust-mode-hook 'cargo-minor-mode))
-(use-package racer
-  :ensure t
-  :after rust-mode
-  :init
-  (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook #'eldoc-mode)
-  (add-hook 'racer-mode-hook #'company-mode))
+	      (setq-local indent-tabs-mode nil))))
 
 ;; scheme/guile
 (use-package geiser :ensure t)
@@ -219,23 +217,12 @@
 (use-package protobuf-mode
   :ensure t)
 
-;; web editing
 (use-package web-mode
+  :ensure t)
+(use-package elixir-mode
   :ensure t
-  :diminish web-mode
-  :mode
-  (("\\.phtml\\'" . web-mode)
-   ("\\.tpl\\.php\\'" . web-mode)
-   ("\\.php\\'" . web-mode)
-   ("\\.jsp\\'" . web-mode)
-   ("\\.as[cp]x\\'" . web-mode)
-   ("\\.erb\\'" . web-mode)
-   ("\\.mustache\\'" . web-mode)
-   ("\\.djhtml\\'" . web-mode)
-   ("\\.jst.ejs\\'" . web-mode)
-   ("\\.html?\\'" . web-mode))
-  :init
-  (setq indent-tabs-mode nil))
+  :bind (:map elixir-mode-map
+	      ("C-c C-f" . elixir-format)))
 
 ;; LaTeX editing
 (use-package magic-latex-buffer :ensure t)
@@ -277,6 +264,11 @@
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
   (load-theme 'doom-one t))
+
+;; Add font to render emoji
+(if (>= emacs-major-version 27)
+    (set-fontset-font t '(#x1f000 . #x1faff)
+		      (font-spec :family "Noto Color Emoji")))
 
 (message "init.el complete")
 

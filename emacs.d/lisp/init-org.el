@@ -35,4 +35,8 @@
 
 (add-hook 'org-mode-hook 'flyspell-mode)
 
+;; Allow expanding sinippets to structures (e.g. `< s TAB' to create a
+;; code block)
+(require 'org-tempo)
+
 (provide 'init-org)
