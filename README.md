@@ -45,12 +45,23 @@ requests.
 
 License
 ------------------------------
-The **vimrc** file is a heavily modified, monolithic version of what
-you'd find in the vimrcs directory of https://github.com/amix/vimrc .
-The repository doesn't explicitly include a license, but it includes a
-submodule which is GPL so I would imagine it falls under the GPL
-license as well.
+Since this repository is an aggregate of many components, it doesn't
+make much sense to apply a license to the whole thing.  It makes more
+sense for licensing to be on a file-by-file basis. So, if a file
+mentions a license, then that file is licensed as
+indicated. Otherwise, if a file makes no mention of a license, then
+that file is licensed under the Apache License, Version 2.0.
 
-That would probably make this work GPL as well.
+The repository as a whole is licensed under GPLv3.
 
-... I'm not a lawyer.
+Basically my intent is this: If you take an individual file, that file
+is licensed either as indicated in the file, or if no license is
+noted, then that file is licensed under the permissive Apache 2.0
+license.
+
+However, since there are some files licensed under GPL, then the work
+as a whole (if you can even really call it that) must also be GPL.
+
+Essentially, you're free to use this stuff however you want for your
+development environment. But if you're distributing it somehow beyond
+your own environments, then consider the licensing requirements.
